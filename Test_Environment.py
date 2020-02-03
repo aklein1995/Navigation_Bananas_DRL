@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Feb  3 11:39:26 2020
+Created on Mon Feb 3 2020
 @author: alain
 """
 
 from unityagents import UnityEnvironment
 import numpy as np
 
-env = UnityEnvironment(file_name="/home/alain/Documentos/GitHub/deep-reinforcement-learning/p1_navigation/Banana_Linux/Banana.x86_64")
+# set the path to match the location of the Unity environment
+path = "/home/alain/Documentos/GitHub/deep-reinforcement-learning/p1_navigation/Banana_Linux/Banana.x86_64"
+env = UnityEnvironment(file_name=path)
 
 # get the default brain
 brain_name = env.brain_names[0]
@@ -44,4 +46,4 @@ while True:
         break
     
 print("Score: {}".format(score))
-# env.close()
+env.close()

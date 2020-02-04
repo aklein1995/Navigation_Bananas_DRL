@@ -24,7 +24,13 @@ The task is episodic, and in order to solve the environment, the agent must get 
 
 ### Dependencies
 
-To set up the python environment to run the code in this repository, follow the instructions below.
+To set up the python environment to run the code in this repository, the easiest way is to import the project environment in your conda.
+ 	- The provided environment has been exported with __Linux, Ubuntu 18.04 LTS__.
+	```bash
+	conda env create -f drlnd_environment.yml
+	```
+
+If the above has not worked or is not a feasible solution, follow the instructions below.
 
 1. Create (and activate) a new environment with Python 3.6.
 
@@ -57,7 +63,7 @@ python -m ipykernel install --user --name drlnd --display-name "drlnd"
 Before running code in a notebook, change the kernel to match the `drlnd` environment by using the drop-down `Kernel` menu. 
 
 ### Environment 
-5. Download the environment from one of the links below.  You need only select the environment that matches your operating system:
+1. Download the environment from one of the links below.  You need only select the environment that matches your operating system:
     - Linux: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Linux.zip)
     - Mac OSX: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana.app.zip)
     - Windows (32-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Windows_x86.zip)
@@ -65,8 +71,8 @@ Before running code in a notebook, change the kernel to match the `drlnd` enviro
     
     (_For Windows users_) Check out [this link](https://support.microsoft.com/en-us/help/827218/how-to-determine-whether-a-computer-is-running-a-32-bit-version-or-64) if you need help with determining if your computer is running a 32-bit version or 64-bit version of the Windows operating system.
 
-6. Place the file in the previously created/cloned DRLND GitHub repository, in the `p1_navigation/` folder, and unzip (or decompress) the file. 
+2. Place the file in the previously created/cloned DRLND GitHub repository, in the `p1_navigation/` folder, and unzip (or decompress) the file. 
 
-### Instructions
+## Instructions
 
 Follow the instructions in `Navigation.ipynb` to get started with training your own agent!  

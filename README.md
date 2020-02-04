@@ -25,7 +25,8 @@ The task is episodic, and in order to solve the environment, the agent must get 
 ### Dependencies
 
 To set up the python environment to run the code in this repository, the easiest way is to import the project environment in your conda.
- 	- The provided environment has been exported with __Linux, Ubuntu 18.04 LTS__.
+ 	
+	- The provided environment has been exported with __Linux, Ubuntu 18.04 LTS__:
 	```bash
 	conda env create -f drlnd_environment.yml
 	```

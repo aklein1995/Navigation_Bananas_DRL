@@ -3,8 +3,8 @@ from dqn_agent import Agent
 from model import QNetwork
 from unityagents import UnityEnvironment
 
+import pickle
 import numpy as np
-import matplotlib.pyplot as plt
 import torch
 from collections import deque
 
@@ -26,38 +26,11 @@ def defineEnvironment(path,verbose=False):
         print('States have length:', state_size)
     return env, brain_name, state_size, action_size
 
-def plotResults(scores,baseline=13):
-    # plot the scores
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    plt.plot(np.arange(len(scores)), scores)
-    plt.plot([0,len(scores)-1],[baseline,baseline],color='#00FF00',label='target')
-    plt.ylabel('Score')
-    plt.xlabel('Episode #')
-    plt.show()
-
-def plotResults_100(scores,baseline=13):
-    # plot the scores every 100 episodes
-    compact_scores = []
-    for i in range(1,len(scores)+1):
-        if i < 100:
-            compact_scores.append(np.mean(scores[0:i]))
-        else:
-            compact_scores.append(np.mean(scores[i-100:i]))
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    plt.plot(np.arange(len(compact_scores)), compact_scores, label='agent')
-    plt.plot([0,len(compact_scores)-1],[baseline,baseline],color='#00FF00',label='target')
-    plt.title('Score obtained in 100 consecutive episodes')
-    plt.ylabel('Score')
-    plt.xlabel('Episodes #')
-    plt.show()
-
-def train(agent,env,brain_name,n_episodes=2000,filename='model_weights_targetnetwork_er'):
+def train(agent,env,brain_name,n_episodes=2000,filename='model_weights.pth'):
     eps_start = 1.0
     eps_end = 0.01
     eps_decay = 0.995
-    
+
     scores = []
     scores_window = deque(maxlen=100)
     eps = eps_start
@@ -72,8 +45,10 @@ def train(agent,env,brain_name,n_episodes=2000,filename='model_weights_targetnet
         # get the current state
         state = env_info.vector_observations[0]
         score = 0
+        visits = 0
         # --- Visits --- #
         while True:
+            visits += 1
             # Agent selects an action
             action = agent.choose_action(state,eps)
             # Take the action and get {s',reward,done} from environment
@@ -94,13 +69,16 @@ def train(agent,env,brain_name,n_episodes=2000,filename='model_weights_targetnet
         scores_window.append(score)
         if e % print_every == 0:
             print('Episode {}/{}\tAvg Score: {:.2f}'.format(e,n_episodes,np.mean(scores_window)))
-        if np.mean(scores_window) > stop_criteria and aux:
+        # print('{} episodes in the last 100 episodes below 13.0'.format(np.sum(np.array(scores_window) < stop_criteria)))
+        # if np.any(np.array(scores_window) < stop_criteria) == False and aux:
+        if np.mean(scores_window) >= stop_criteria and aux:
             print('Environment solved in {} episodes'.format(e))
+            checkpoint = e
             aux = False
-    
+
     # save the model weights
-    torch.save(agent.qnetwork_local.state_dict(), filename+'.pth')
-    return scores
+    torch.save(agent.qnetwork_local.state_dict(), filename)
+    return scores,checkpoint
 
 def evaluate(agent,env,brain_name,n_episodes=100):
     scores = []
@@ -131,24 +109,28 @@ def evaluate(agent,env,brain_name,n_episodes=100):
     return scores
 
 
-if __name__ == "__main__":       
+mode = 'evaluation'
+algorithm = 'DDQN'
+results_filename = 'scores/scores_' + algorithm + '_' + mode
+# insert correctly the filename path  (specially for evaluation)
+# weights_filename = 'weights/' + algorithm + '_model_weights.pth'
+weights_filename = 'weights/' + algorithm + '_model_weights_' + 'C5000' + '.pth'
+
+
+if __name__ == "__main__":
     path = "Banana_Linux/Banana.x86_64"     # set the path for the Unity environment
     env, brain_name, state_size,action_size = defineEnvironment(path)                  # set environment and get state & action size
 
-    mode = 'evaluation'
-    agent = Agent(state_size = state_size, action_size = action_size, seed = 0)
+    agent = Agent(state_size = state_size, action_size = action_size, seed = 0, algorithm = algorithm)
+
     if mode == 'train':
-        scores = train(agent, env, brain_name, n_episodes=2000)
+        scores,checkpoint = train(agent, env, brain_name, n_episodes=1500, filename = weights_filename)
     elif mode == 'evaluation':
-        path_weights = 'model_weights_targetnetwork_er.pth'
-        agent.qnetwork_local.load_state_dict(torch.load(path_weights))
+        agent.qnetwork_local.load_state_dict(torch.load(weights_filename))
         agent.qnetwork_local.eval()
         scores = evaluate(agent, env, brain_name, n_episodes=100)
-        print('Avg score through evaluation/testing: {}'.format(np.mean(scores)))    
-    env.close()    
-    plotResults(scores)
-    plotResults_100(scores)
-    
-    
-    
-
+        checkpoint = None
+    env.close()
+    # export results
+    with open(results_filename,'wb') as f:
+        pickle.dump([scores,checkpoint],f)

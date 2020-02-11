@@ -75,5 +75,5 @@ Before running code in a notebook, change the kernel to match the `drlnd` enviro
 
 ## Instructions
 
-Follow the instructions in `Navigation.ipynb` to get started with training your own agent!
-In the `Report.pdf` you will find information about the implementation and the obtained results. Check it out and try it yourself!
+Follow the instructions in `Navigation.ipynb` to get started with training your own agent!  
+In the `DRLND_P1_Report.pdf` you will find information about the implementation and the obtained results. Check it out and try it yourself!

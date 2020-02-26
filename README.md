@@ -24,12 +24,11 @@ The task is episodic, and in order to solve the environment, the agent must get 
 
 ### Dependencies
 
-To set up the python environment to run the code in this repository, the easiest way is to import the project environment in your conda.
- 	
-	- __Linux, Ubuntu 18.04 LTS__:
-	```bash
-	conda env create -f drlnd_environment.yml
-	```
+To set up the python environment to run the code in this repository, the easiest way is to import the project environment in your conda.  
+- __Linux, Ubuntu 18.04 LTS__:
+```bash
+conda env create -f drlnd_environment.yml
+```
 
 If the above has not worked or is not a feasible solution, follow the instructions below.
 
@@ -76,5 +75,5 @@ Before running code in a notebook, change the kernel to match the `drlnd` enviro
 
 ## Instructions
 
-Follow the instructions in `Navigation.ipynb` to get started with training your own agent!
-In the `Report.pdf` you will find information about the implementation and the obtained results. Check it out and try it yourself!
+Follow the instructions in `Navigation.ipynb` to get started with training your own agent!  
+In the `DRLND_P1_Report.pdf` you will find information about the implementation and the obtained results. Check it out and try it yourself!
